@@ -1,4 +1,4 @@
-![alt text](https://intergenstudios.com/Downloads/cmsinstaller.png "CMS Installer")
+![alt text](https://raw.githubusercontent.com/InterGenStudios/csf-wl-cfips.sh/master/csf-wl-cfips.png "csf-wl-cfips")
 
 ---
 
