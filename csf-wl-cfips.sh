@@ -146,7 +146,7 @@ CSF_LFD_R () {
 
     echo -e "${GREEN}Restarting CSF and LFD...${NOCOLOR}"
     csf -r 2>&1 >/dev/null && lfd -r 2>&1 >/dev/null
-    echo -e "\n\n\n${WHITE}CloudFlare IP Whitelisting completed${NOCOLOR}\n"
+    echo -e "\n\n\n${WHITE}CloudFlare IP Whitelisting completed${NOCOLOR}\n\n"
 
 }
 
