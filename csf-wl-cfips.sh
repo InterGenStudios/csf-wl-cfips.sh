@@ -100,7 +100,7 @@ RE_CHECK_VERBOSE () {
 
 CF_CHECK_DENY () {
 
-    echo -e "${GREEN}Checking for CloudFlare IPs in iptables and temp ban list...${NOCOLOR}\n"
+    echo -e "${GREEN}Checking for CloudFlare IPs in iptables and temp ban list...${NOCOLOR}\n\n"
     for IP in ${CF_IPS[@]}; do
         if [ -n "$(csf -g $IP | grep -i deny)" ] || [ -n "$(grep $IP /var/log/lfd.log)" ]; then
             echo -e "${GREEN}CloudFlare IP found, removing block...${NOCOLOR}\n"
@@ -110,7 +110,7 @@ CF_CHECK_DENY () {
             echo -e "${GREEN}CloudFlare IP block removed${NOCOLOR}\n"
         fi
     done
-    echo -e "${GREEN}Block checks complete${NOCOLOR}\n"
+    echo -e "${GREEN}Block checks complete${NOCOLOR}"
 
 }
 
