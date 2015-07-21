@@ -103,10 +103,10 @@ CF_CHECK_DENY () {
     echo -e "${GREEN}Checking for CloudFlare IP blocks in iptables and temp ban list...${NOCOLOR}\n\n"
     for IP in ${CF_IPS[@]}; do
         if [ -n "$(csf -g $IP | grep -i deny)" ] || [ -n "$(grep $IP /var/log/lfd.log)" ]; then
-            echo -e "${GREEN}CloudFlare IP found, removing block...${NOCOLOR}"
+            echo -e "${YELLOW}CloudFlare IP found, ${NOCOLOR}removing block..."
             sleep 1
-            csf -dr $IP 2>&1 >/dev/null
-            csf -tr $IP 2>&1 >/dev/null
+            csf -dr "$IP" 2>&1 >/dev/null
+            csf -tr "$IP" 2>&1 >/dev/null
             echo -e "${GREEN}CloudFlare IP block removed${NOCOLOR}\n"
         fi
     done
@@ -118,7 +118,7 @@ CF_IPS_ALLOW () {
 
     echo -e "${GREEN}Adding CloudFlare IPs to csf.allow...${NOCOLOR}\n"
     for IP in ${CF_IPS[@]}; do
-        csf -a $IP 2>&1 >/dev/null
+        csf -a "$IP" 2>&1 >/dev/null
     done
     sleep 1
     echo -e "\n\n${GREEN}CloudFlare IPs have been added to csf.allow${NOCOLOR}"
@@ -132,7 +132,7 @@ CF_IPS_IGNORE () {
     echo " " >> /etc/csf/csf.ignore
     echo "#BEGIN CLOUDFLARE IP ENTRIES - ENTERED ON $TIMESTAMP" >> /etc/csf/csf.ignore
     for IP in ${CF_IPS[@]}; do
-        echo $IP >> /etc/csf/csf.ignore
+        echo "$IP" >> /etc/csf/csf.ignore
     done
     echo "#END CLOUDFLARE IP ENTRIES" >> /etc/csf/csf.ignore
     echo " " >> /etc/csf/csf.ignore
@@ -146,7 +146,7 @@ CSF_LFD_R () {
 
     echo -e "${GREEN}Restarting CSF and LFD...${NOCOLOR}"
     csf -r 2>&1 >/dev/null && lfd -r 2>&1 >/dev/null
-    echo -e "\n\n\n${WHITE}CloudFlare IP Whitelisting completed${NOCOLOR}\n\n"
+    echo -e "\n\n\n${WHITE}${UNDERLINE_TEXT}CloudFlare IP Whitelisting completed${NOCOLOR}\n\n"
 
 }
 
@@ -166,7 +166,7 @@ if [ "$(id -u)" != "0" ]; then
     echo -e "\n\n${RED}${BLINK}--------${NOCOLOR}"
     echo -e "${RED}${BLINK}WARNING!${NOCOLOR}"
     echo -e "${RED}${BLINK}--------${NOCOLOR}\n\n"
-    echo -e "${WHITE}csf-wl-cfips.sh must be run as ${RED}root${NOCOLOR}\n\n"
+    echo -e "${WHITE}csf-wl-cfips.sh must be run as ${RED}${UNDERLINE_TEXT}root${NOCOLOR}\n\n"
     echo -e "${GREEN}(Exiting now...)${NOCOLOR}\n\n"
     exit 1
 fi
