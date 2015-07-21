@@ -103,7 +103,7 @@ CF_CHECK_DENY () {
     echo -e "${GREEN}Checking for CloudFlare IP blocks in iptables and temp ban list...${NOCOLOR}\n\n"
     for IP in ${CF_IPS[@]}; do
         if [ -n "$(csf -g $IP | grep -i deny)" ] || [ -n "$(grep $IP /var/log/lfd.log)" ]; then
-            echo -e "${GREEN}CloudFlare IP found, removing block...${NOCOLOR}\n"
+            echo -e "${GREEN}CloudFlare IP found, removing block...${NOCOLOR}"
             sleep 1
             csf -dr $IP 2>&1 >/dev/null
             csf -tr $IP 2>&1 >/dev/null
