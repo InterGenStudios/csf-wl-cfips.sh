@@ -98,11 +98,27 @@ RE_CHECK_VERBOSE () {
 
 }
 
+CF_CHECK_DENY () {
+
+    echo -e "${GREEN}Checking for CloudFlare IPs in iptables and temp ban list...${NOCOLOR}\n"
+    for IP in ${CF_IPS[@]}; do
+        if [ -n "$(csf -g $IP | grep -i deny)" ] || [ -n "$(grep $IP /var/log/lfd.log)" ] then
+            echo -e "${GREEN}CloudFlare IP found, removing block...${NOCOLOR}\n"
+            sleep 1
+            csf -dr $IP 2>&1 >/dev/null
+            csf -tr $IP 2>&1 >/dev/null
+            echo -e "${GREEN}CloudFlare IP block removed${NOCOLOR}\n"
+        fi
+    done
+    echo -e "${GREEN}Block checks complete${NOCOLOR}\n"
+
+}
+
 CF_IPS_ALLOW () {
 
     echo -e "${GREEN}Adding CloudFlare IPs to csf.allow...${NOCOLOR}\n"
     for IP in ${CF_IPS[@]}; do
-        csf -a $IP 2>/dev/null
+        csf -a $IP 2>&1 >/dev/null
     done
     sleep 1
     echo -e "\n\n${GREEN}CloudFlare IPs have been added to csf.allow${NOCOLOR}"
@@ -129,7 +145,7 @@ CF_IPS_IGNORE () {
 CSF_LFD_R () {
 
     echo -e "${GREEN}Restarting CSF and LFD...${NOCOLOR}"
-    csf -r 2>/dev/null && lfd -r 2>/dev/null
+    csf -r 2>&1 >/dev/null && lfd -r 2>&1 >/dev/null
     echo -e "\n\n\n${GREEN}CloudFlare IP Whitelisting completed${NOCOLOR}\n"
 
 }
@@ -170,6 +186,8 @@ fi
 clear
 HEADER
 CHECK_VERBOSE
+CF_CHECK_DENY
+DIVIDER
 CF_IPS_ALLOW
 DIVIDER
 CF_IPS_IGNORE
